@@ -1,4 +1,47 @@
 name: CI/CD Pipeline
 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install Dependencies
+      run: |
+        pip install pyinstaller
+
+    - name: Build Application
+      run: |
+        pyinstaller --onefile app.py
+
+    - name: Install Advanced Installer
+      run: |
+        choco install advanced-installer --version=22.3 -y
+
+    - name: Build Installer
+      run: |
+        Start-Process -FilePath "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" `
+                      -ArgumentList "/build SimpleAppInstaller.aip" `
+                      -Wait
+
+    - name: Upload Installer to Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: SimpleAppInstaller
+        path: SimpleApp\Output\*
+
+
 
 
