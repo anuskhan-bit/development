@@ -41,15 +41,11 @@ jobs:
     - name: Configure and Build Installer
       shell: cmd
       run: |
-        REM Debug: Output the current directory and list files
-        echo Current Directory: %CD%
-        dir %CD%
-
         REM Set variables
         SET APP_NAME=SimpleApp
-        SET OUTPUT_DIR=%CD%\SimpleApp\Output
-        SET DIST_DIR=%CD%\dist
-        SET AIP_FILE=%CD%\%APP_NAME%Installer.aip
+        SET OUTPUT_DIR=C:\Users\akhan\Desktop\Anus Khan\Output
+        SET DIST_DIR=C:\Users\akhan\Desktop\Anus Khan\dist
+        SET AIP_FILE=C:\Users\akhan\Desktop\Anus Khan\%APP_NAME%Installer.aip
 
         REM Ensure output directory exists
         IF NOT EXIST "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%"
@@ -57,6 +53,7 @@ jobs:
         REM Debug: Check directories before proceeding
         echo DIST_DIR=%DIST_DIR%
         echo OUTPUT_DIR=%OUTPUT_DIR%
+        echo AIP_FILE=%AIP_FILE%
 
         REM Create new Advanced Installer project
         "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /new "%AIP_FILE%" /type exe
@@ -84,5 +81,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: SimpleAppInstaller
-        path: SimpleApp\Output\*
+        path: C:\Users\akhan\Desktop\Anus Khan\Output\*
 
