@@ -1,4 +1,4 @@
-name: Automated CI/CD Pipeline
+name: Build and Deploy Application
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout Code
+    - name: Checkout Repository
       uses: actions/checkout@v3
 
     - name: Set up Python
@@ -22,48 +22,30 @@ jobs:
       run: |
         pip install pyinstaller
 
-    - name: Build Application
+    - name: Build Application with PyInstaller
       run: |
         pyinstaller --onefile app.py
 
     - name: Install Advanced Installer
-      run: |
-        choco install advanced-installer --version=22.3 -y
+      run: choco install advanced-installer --version=22.3 -y
 
-    - name: Configure and Build Installer
-      shell: cmd
+    - name: Define Variables
       run: |
-        REM Define variables
         SET APP_NAME=%GITHUB_REPOSITORY_NAME%
-        SET OUTPUT_DIR=C:\Users\%GITHUB_ACTOR%\Desktop\%GITHUB_REPOSITORY_NAME%\dist
+        SET OUTPUT_DIR=C:\Users\%GITHUB_ACTOR%\Desktop\%APP_NAME%\dist
         SET AIP_FILE=%OUTPUT_DIR%\%APP_NAME%.aip
-
-        REM Ensure output directory exists
         IF NOT EXIST %OUTPUT_DIR% mkdir %OUTPUT_DIR%
 
-        REM Debugging output
-        echo APP_NAME=%APP_NAME%
-        echo OUTPUT_DIR=%OUTPUT_DIR%
-        echo AIP_FILE=%AIP_FILE%
-
-        REM Create new Advanced Installer project
+    - name: Create New AIP Project
+      shell: cmd
+      run: |
         "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /new "%AIP_FILE%" /type exe
 
-        REM Validate AIP file creation
-        IF NOT EXIST "%AIP_FILE%" (
-          echo Error: Failed to create the AIP file at "%AIP_FILE%".
-          exit /b 1
-        )
-
-        REM Configure package settings
+    - name: Configure and Build the Installer
+      shell: cmd
+      run: |
         "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit "%AIP_FILE%" /SetPackageName "%APP_NAME%.exe"
         "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit "%AIP_FILE%" /SetOutputPath "%OUTPUT_DIR%"
-
-        REM Add files and shortcuts
-        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit "%AIP_FILE%" /AddFolder "Application Folder" "%OUTPUT_DIR%"
-        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit "%AIP_FILE%" /AddShortcut Desktop "Application Folder\%APP_NAME%.exe"
-
-        REM Build the installer
         "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /build "%AIP_FILE%"
 
     - name: Upload Installer to Artifacts
@@ -71,6 +53,7 @@ jobs:
       with:
         name: ${APP_NAME}Installer
         path: ${OUTPUT_DIR}/*
+
 
 
 
