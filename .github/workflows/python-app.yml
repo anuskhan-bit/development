@@ -34,7 +34,7 @@ jobs:
         SET APP_NAME=%GITHUB_REPOSITORY_NAME%
         SET OUTPUT_DIR=C:\Users\%GITHUB_ACTOR%\Desktop\%APP_NAME%\dist
         SET AIP_FILE=%OUTPUT_DIR%\%APP_NAME%.aip
-        IF NOT EXIST %OUTPUT_DIR% mkdir %OUTPUT_DIR%
+        IF NOT EXIST "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%"
 
     - name: Create New AIP Project
       shell: cmd
@@ -53,6 +53,7 @@ jobs:
       with:
         name: ${APP_NAME}Installer
         path: ${OUTPUT_DIR}/*
+
 
 
 
