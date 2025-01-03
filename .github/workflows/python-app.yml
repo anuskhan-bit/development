@@ -47,16 +47,16 @@ jobs:
     # Step 8: Create a new AIP project
     - name: Create New AIP Project
       run: |
-        "C:\\Program Files (x86)\\Caphyon\\Advanced Installer 22.3\\bin\\x86\\AdvancedInstaller.com" /new "%AIP_FILE%" -type exe -overwrite
+        cmd.exe /c "C:\\Program Files (x86)\\Caphyon\\Advanced Installer 22.3\\bin\\x86\\AdvancedInstaller.com /new %AIP_FILE% -type exe -overwrite"
       env:
         AIP_FILE: ${{ env.AIP_FILE }}
 
     # Step 9: Configure and Build the Installer
     - name: Configure and Build the Installer
       run: |
-        "C:\\Program Files (x86)\\Caphyon\\Advanced Installer 22.3\\bin\\x86\\AdvancedInstaller.com" /edit "%AIP_FILE%" /SetPackageName "${{ github.repository }}.exe"
-        "C:\\Program Files (x86)\\Caphyon\\Advanced Installer 22.3\\bin\\x86\\AdvancedInstaller.com" /edit "%AIP_FILE%" /SetOutputPath "%OUTPUT_DIR%"
-        "C:\\Program Files (x86)\\Caphyon\\AdvancedInstaller.com" /build "%AIP_FILE%"
+        cmd.exe /c "C:\\Program Files (x86)\\Caphyon\\Advanced Installer 22.3\\bin\\x86\\AdvancedInstaller.com /edit %AIP_FILE% /SetPackageName ${GITHUB_REPOSITORY}.exe"
+        cmd.exe /c "C:\\Program Files (x86)\\Caphyon\\Advanced Installer 22.3\\bin\\x86\\AdvancedInstaller.com /edit %AIP_FILE% /SetOutputPath %OUTPUT_DIR%"
+        cmd.exe /c "C:\\Program Files (x86)\\Caphyon\\Advanced Installer 22.3\\bin\\x86\\AdvancedInstaller.com /build %AIP_FILE%"
       env:
         OUTPUT_DIR: ${{ env.OUTPUT_DIR }}
         AIP_FILE: ${{ env.AIP_FILE }}
