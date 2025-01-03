@@ -28,7 +28,7 @@ jobs:
 
     - name: Install Advanced Installer
       run: |
-        choco install advanced-installer --version=20.0 -y
+        choco install advanced-installer --version=22.3 -y
 
     - name: Build Installer
       run: |
