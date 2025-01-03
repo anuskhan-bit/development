@@ -34,8 +34,8 @@ jobs:
       shell: cmd
       run: |
         REM Define variables
-        SET APP_NAME=SimpleApp
-        SET OUTPUT_DIR=C:\Users\akhan\Desktop\Anus Khan\dist
+        SET APP_NAME=%GITHUB_REPOSITORY_NAME%
+        SET OUTPUT_DIR=C:\Users\%GITHUB_ACTOR%\Desktop\%GITHUB_REPOSITORY_NAME%\dist
         SET AIP_FILE=%OUTPUT_DIR%\%APP_NAME%.aip
 
         REM Ensure output directory exists
@@ -69,5 +69,7 @@ jobs:
     - name: Upload Installer to Artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: SimpleAppInstaller
-        path: C:/Users/akhan/Desktop/Anus Khan/dist/*
+        name: ${APP_NAME}Installer
+        path: ${OUTPUT_DIR}/*
+
+
