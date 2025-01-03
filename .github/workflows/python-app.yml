@@ -56,7 +56,7 @@ jobs:
       run: |
         "C:\\Program Files (x86)\\Caphyon\\Advanced Installer 22.3\\bin\\x86\\AdvancedInstaller.com" /edit "%AIP_FILE%" /SetPackageName "${{ github.repository }}.exe"
         "C:\\Program Files (x86)\\Caphyon\\Advanced Installer 22.3\\bin\\x86\\AdvancedInstaller.com" /edit "%AIP_FILE%" /SetOutputPath "%OUTPUT_DIR%"
-        "C:\\Program Files (x86)\\Caphyon\\Advanced Installer 22.3\\bin\\x86\\AdvancedInstaller.com" /build "%AIP_FILE%"
+        "C:\\Program Files (x86)\\Caphyon\\AdvancedInstaller.com" /build "%AIP_FILE%"
       env:
         OUTPUT_DIR: ${{ env.OUTPUT_DIR }}
         AIP_FILE: ${{ env.AIP_FILE }}
