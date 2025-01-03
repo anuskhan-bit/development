@@ -47,7 +47,7 @@ jobs:
     # Step 8: Create a new AIP project
     - name: Create New AIP Project
       run: |
-        "C:\\Program Files (x86)\\Caphyon\\Advanced Installer 22.3\\bin\\x86\\AdvancedInstaller.com" /newproject "%AIP_FILE%" -type exe -overwrite
+        "C:\\Program Files (x86)\\Caphyon\\Advanced Installer 22.3\\bin\\x86\\AdvancedInstaller.com" /new "%AIP_FILE%" -type exe -overwrite
       env:
         AIP_FILE: ${{ env.AIP_FILE }}
 
@@ -67,5 +67,6 @@ jobs:
       with:
         name: Installer
         path: ${{ env.OUTPUT_DIR }}\\*
+
 
 
