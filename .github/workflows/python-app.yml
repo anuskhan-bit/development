@@ -72,4 +72,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: Installer
-        path: "${{ env.OUTPUT_DIR }}\*"
+        path: C:\Users\${{ github.actor }}\Desktop\${{ github.repository }}\dist\*
+
