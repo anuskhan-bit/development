@@ -35,9 +35,9 @@ jobs:
       run: |
         REM Set variables
         SET APP_NAME=SimpleApp
-        SET OUTPUT_DIR=SimpleApp\Output
-        SET DIST_DIR=dist
-        SET AIP_FILE=%APP_NAME%Installer.aip
+        SET OUTPUT_DIR=%CD%\SimpleApp\Output
+        SET DIST_DIR=%CD%\dist
+        SET AIP_FILE=%CD%\%APP_NAME%Installer.aip
 
         REM Ensure output directory exists
         IF NOT EXIST "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%"
@@ -53,7 +53,7 @@ jobs:
         "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit "%AIP_FILE%" /AddFolder "Application Folder" "%DIST_DIR%"
 
         REM Add desktop shortcut
-        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit "%AIP_FILE%" /AddShortcut Desktop "Application Folder\%APP_NAME%.exe"
+        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit "%AIP_FILE%" /AddShortcut Desktop "Application Folder\\%APP_NAME%.exe"
 
         REM Build the installer
         "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /build "%AIP_FILE%"
