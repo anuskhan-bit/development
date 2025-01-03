@@ -10,38 +10,46 @@ jobs:
     runs-on: windows-latest
 
     steps:
+    # Step 1: Checkout the repository
     - name: Checkout Repository
       uses: actions/checkout@v3
 
+    # Step 2: Set up Python
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.9'
 
+    # Step 3: Install Python dependencies
     - name: Install Python Dependencies
       run: |
         pip install pyinstaller
 
+    # Step 4: Build the application with PyInstaller
     - name: Build Application with PyInstaller
       run: |
         pyinstaller --onefile app.py
 
+    # Step 5: Install Advanced Installer using Chocolatey
     - name: Install Advanced Installer
       run: choco install advanced-installer --version=22.3 -y
 
+    # Step 6: Define environment variables
     - name: Define Variables
       shell: cmd
       run: |
         SET APP_NAME=%GITHUB_REPOSITORY_NAME%
         SET OUTPUT_DIR=C:\Users\%GITHUB_ACTOR%\Desktop\%APP_NAME%\dist
         SET AIP_FILE=%OUTPUT_DIR%\%APP_NAME%.aip
-        IF NOT EXIST "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%"
+        IF NOT EXIST "%OUTPUT_DIR%" (mkdir "%OUTPUT_DIR%")
 
+    # Step 7: Create a new AIP project
     - name: Create New AIP Project
       shell: cmd
       run: |
-        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /new "%AIP_FILE%" /type exe
+        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /newproject "%AIP_FILE%" -type exe -overwrite
 
+    # Step 8: Configure and build the installer
     - name: Configure and Build the Installer
       shell: cmd
       run: |
@@ -49,11 +57,13 @@ jobs:
         "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit "%AIP_FILE%" /SetOutputPath "%OUTPUT_DIR%"
         "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /build "%AIP_FILE%"
 
+    # Step 9: Upload the installer to GitHub artifacts
     - name: Upload Installer to Artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: ${APP_NAME}Installer
-        path: ${OUTPUT_DIR}/*
+        name: Installer
+        path: C:\Users\%GITHUB_ACTOR%\Desktop\%GITHUB_REPOSITORY_NAME%\dist\*
+
 
 
 
