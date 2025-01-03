@@ -30,9 +30,21 @@ jobs:
       run: |
         choco install advanced-installer --version=22.3 -y
 
+    - name: Verify Advanced Installer Installation
+      shell: cmd
+      run: |
+        IF NOT EXIST "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" (
+          echo Error: Advanced Installer is not installed correctly.
+          exit /b 1
+        )
+
     - name: Configure and Build Installer
       shell: cmd
       run: |
+        REM Debug: Output the current directory and list files
+        echo Current Directory: %CD%
+        dir %CD%
+
         REM Set variables
         SET APP_NAME=SimpleApp
         SET OUTPUT_DIR=%CD%\SimpleApp\Output
@@ -42,8 +54,18 @@ jobs:
         REM Ensure output directory exists
         IF NOT EXIST "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%"
 
+        REM Debug: Check directories before proceeding
+        echo DIST_DIR=%DIST_DIR%
+        echo OUTPUT_DIR=%OUTPUT_DIR%
+
         REM Create new Advanced Installer project
         "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /new "%AIP_FILE%" /type exe
+
+        REM Check if the AIP file was created
+        IF NOT EXIST "%AIP_FILE%" (
+          echo Error: Failed to create the AIP file at "%AIP_FILE%".
+          exit /b 1
+        )
 
         REM Set package name and output path
         "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit "%AIP_FILE%" /SetPackageName "%APP_NAME%.exe"
@@ -63,3 +85,4 @@ jobs:
       with:
         name: SimpleAppInstaller
         path: SimpleApp\Output\*
+
