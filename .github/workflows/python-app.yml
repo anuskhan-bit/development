@@ -30,31 +30,20 @@ jobs:
       run: |
         choco install advanced-installer --version=22.3 -y
 
-    - name: Verify Advanced Installer Installation
-      shell: cmd
-      run: |
-        IF NOT EXIST "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" (
-          echo Error: Advanced Installer is not installed correctly.
-          exit /b 1
-        )
-
     - name: Configure and Build Installer
       shell: cmd
       run: |
         REM Set variables
         SET APP_NAME=SimpleApp
-        SET OUTPUT_DIR=%USERPROFILE%\Desktop\%APP_NAME%\Output
-        SET DIST_DIR=%USERPROFILE%\Desktop\%APP_NAME%\dist
-        SET AIP_FILE=%USERPROFILE%\Desktop\%APP_NAME%Installer.aip
+        SET OUTPUT_DIR=C:\Users\akhan\Desktop\Anus Khan\dist
+        SET AIP_FILE=%OUTPUT_DIR%\%APP_NAME%.aip
 
-        REM Ensure output and dist directories exist
+        REM Ensure the output directory exists
         IF NOT EXIST "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%"
-        IF NOT EXIST "%DIST_DIR%" mkdir "%DIST_DIR%"
 
         REM Debugging paths
         echo APP_NAME=%APP_NAME%
         echo OUTPUT_DIR=%OUTPUT_DIR%
-        echo DIST_DIR=%DIST_DIR%
         echo AIP_FILE=%AIP_FILE%
 
         REM Create a new Advanced Installer project
@@ -71,7 +60,10 @@ jobs:
         "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit "%AIP_FILE%" /SetOutputPath "%OUTPUT_DIR%"
 
         REM Add application files to the installer
-        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit "%AIP_FILE%" /AddFolder "Application Folder" "%DIST_DIR%"
+        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit "%AIP_FILE%" /AddFolder "Application Folder" "%OUTPUT_DIR%"
+
+        REM Add desktop shortcut
+        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit "%AIP_FILE%" /AddShortcut Desktop "Application Folder\\%APP_NAME%.exe"
 
         REM Build the installer
         "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /build "%AIP_FILE%"
@@ -80,6 +72,6 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: SimpleAppInstaller
-        path: ${{ env.USERPROFILE }}\Desktop\SimpleApp\Output\*
+        path: C:\Users\akhan\Desktop\Anus Khan\dist\*
 
 
