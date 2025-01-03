@@ -67,7 +67,7 @@ jobs:
         OUTPUT_DIR: ${{ env.OUTPUT_DIR }}
         AIP_FILE: ${{ env.AIP_FILE }}
 
-    # Step 10: Upload the installer to GitHub artifacts
+    # Step 10: Upload the installer to GitHub artifacts 
     - name: Upload Installer to Artifacts
       uses: actions/upload-artifact@v3
       with:
