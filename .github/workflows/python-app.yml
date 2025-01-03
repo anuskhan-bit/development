@@ -33,38 +33,33 @@ jobs:
     - name: Configure and Build Installer
       shell: cmd
       run: |
-        # Set up variables
-        set APP_NAME=SimpleApp
-        set OUTPUT_DIR=SimpleApp\Output
-        set DIST_DIR=dist
-        set AIP_FILE=SimpleAppInstaller.aip
+        REM Set variables
+        SET APP_NAME=SimpleApp
+        SET OUTPUT_DIR=SimpleApp\Output
+        SET DIST_DIR=dist
+        SET AIP_FILE=%APP_NAME%Installer.aip
 
-        # Create new Advanced Installer project
-        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /new %AIP_FILE% /type exe
+        REM Ensure output directory exists
+        IF NOT EXIST "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%"
 
-        # Set package name and output path
-        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit %AIP_FILE% /SetPackageName "%APP_NAME%.exe"
-        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit %AIP_FILE% /SetOutputPath "%OUTPUT_DIR%"
+        REM Create new Advanced Installer project
+        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /new "%AIP_FILE%" /type exe
 
-        # Add application files to installer
-        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit %AIP_FILE% /AddFolder "Application Folder" %DIST_DIR%
+        REM Set package name and output path
+        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit "%AIP_FILE%" /SetPackageName "%APP_NAME%.exe"
+        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit "%AIP_FILE%" /SetOutputPath "%OUTPUT_DIR%"
 
-        # Add desktop shortcut
-        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit %AIP_FILE% /AddShortcut Desktop "Application Folder\%APP_NAME%.exe"
+        REM Add application files to the installer
+        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit "%AIP_FILE%" /AddFolder "Application Folder" "%DIST_DIR%"
 
-        # Set up other installer properties (e.g., version, icon, etc.)
-        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit %AIP_FILE% /SetVersion 1.0.0
-        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit %AIP_FILE% /SetIcon "dist\icon.ico"
+        REM Add desktop shortcut
+        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit "%AIP_FILE%" /AddShortcut Desktop "Application Folder\%APP_NAME%.exe"
 
-        # Build the installer
-        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /build %AIP_FILE%
+        REM Build the installer
+        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /build "%AIP_FILE%"
 
     - name: Upload Installer to Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: SimpleAppInstaller
         path: SimpleApp\Output\*
-
-
-
-
