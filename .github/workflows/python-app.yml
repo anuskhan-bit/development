@@ -70,7 +70,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: SimpleAppInstaller
-        path: "C:\Users\akhan\Desktop\Anus Khan\dist\*"
-
-
-
+        path: C:/Users/akhan/Desktop/Anus Khan/dist/*
