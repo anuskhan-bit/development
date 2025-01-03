@@ -35,7 +35,7 @@ jobs:
       run: |
         REM Define variables
         SET APP_NAME=SimpleApp
-        SET OUTPUT_DIR="C:\Users\akhan\Desktop\Anus Khan\dist"
+        SET OUTPUT_DIR=C:\Users\akhan\Desktop\Anus Khan\dist
         SET AIP_FILE=%OUTPUT_DIR%\%APP_NAME%.aip
 
         REM Ensure output directory exists
