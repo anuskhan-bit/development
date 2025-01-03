@@ -43,19 +43,21 @@ jobs:
       run: |
         REM Set variables
         SET APP_NAME=SimpleApp
-        SET OUTPUT_DIR=C:\Users\akhan\Desktop\Anus Khan\Output
-        SET DIST_DIR=C:\Users\akhan\Desktop\Anus Khan\dist
-        SET AIP_FILE=C:\Users\akhan\Desktop\Anus Khan\%APP_NAME%Installer.aip
+        SET OUTPUT_DIR=%USERPROFILE%\Desktop\%APP_NAME%\Output
+        SET DIST_DIR=%USERPROFILE%\Desktop\%APP_NAME%\dist
+        SET AIP_FILE=%USERPROFILE%\Desktop\%APP_NAME%Installer.aip
 
-        REM Ensure output directory exists
+        REM Ensure output and dist directories exist
         IF NOT EXIST "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%"
+        IF NOT EXIST "%DIST_DIR%" mkdir "%DIST_DIR%"
 
-        REM Debug: Check directories before proceeding
-        echo DIST_DIR=%DIST_DIR%
+        REM Debugging paths
+        echo APP_NAME=%APP_NAME%
         echo OUTPUT_DIR=%OUTPUT_DIR%
+        echo DIST_DIR=%DIST_DIR%
         echo AIP_FILE=%AIP_FILE%
 
-        REM Create new Advanced Installer project
+        REM Create a new Advanced Installer project
         "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /new "%AIP_FILE%" /type exe
 
         REM Check if the AIP file was created
@@ -71,9 +73,6 @@ jobs:
         REM Add application files to the installer
         "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit "%AIP_FILE%" /AddFolder "Application Folder" "%DIST_DIR%"
 
-        REM Add desktop shortcut
-        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit "%AIP_FILE%" /AddShortcut Desktop "Application Folder\\%APP_NAME%.exe"
-
         REM Build the installer
         "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /build "%AIP_FILE%"
 
@@ -81,5 +80,6 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: SimpleAppInstaller
-        path: C:\Users\akhan\Desktop\Anus Khan\Output\*
+        path: ${{ env.USERPROFILE }}\Desktop\SimpleApp\Output\*
+
 
