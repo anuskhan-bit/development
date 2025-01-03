@@ -34,14 +34,19 @@ jobs:
 
     # Step 6: Define environment variables
     - name: Define Variables
+      shell: cmd
       run: |
-        echo "APP_NAME=${{ github.repository }}" >> $GITHUB_ENV
-        echo "OUTPUT_DIR=C:\\Users\\${{ github.actor }}\\Desktop\\${{ github.repository }}\\dist" >> $GITHUB_ENV
-        echo "AIP_FILE=C:\\Users\\${{ github.actor }}\\Desktop\\${{ github.repository }}\\dist\\${{ github.repository }}.aip" >> $GITHUB_ENV
+        set APP_NAME=${{ github.repository }}
+        set OUTPUT_DIR=C:\Users\${{ github.actor }}\Desktop\${{ github.repository }}\dist
+        set AIP_FILE=C:\Users\${{ github.actor }}\Desktop\${{ github.repository }}\dist\${{ github.repository }}.aip
         if not exist "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%"
+        echo APP_NAME=%APP_NAME% >> $GITHUB_ENV
+        echo OUTPUT_DIR=%OUTPUT_DIR% >> $GITHUB_ENV
+        echo AIP_FILE=%AIP_FILE% >> $GITHUB_ENV
 
     # Step 7: Create a new AIP project
     - name: Create New AIP Project
+      shell: cmd
       run: |
         "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /newproject "%AIP_FILE%" -type exe -overwrite
       env:
@@ -49,6 +54,7 @@ jobs:
 
     # Step 8: Configure and build the installer
     - name: Configure and Build the Installer
+      shell: cmd
       run: |
         "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit "%AIP_FILE%" /SetPackageName "${{ env.APP_NAME }}.exe"
         "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /edit "%AIP_FILE%" /SetOutputPath "${{ env.OUTPUT_DIR }}"
@@ -63,4 +69,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: Installer
-        path: "${{ env.OUTPUT_DIR }}\\*"
+        path: "${{ env.OUTPUT_DIR }}\*"
