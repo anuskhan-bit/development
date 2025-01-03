@@ -32,11 +32,14 @@ jobs:
 
     - name: Build Installer
       run: |
-        "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" /build SimpleAppInstaller.aip
+        Start-Process -FilePath "C:\Program Files (x86)\Caphyon\Advanced Installer 22.3\bin\x86\AdvancedInstaller.com" `
+                      -ArgumentList "/build SimpleAppInstaller.aip" `
+                      -Wait
 
     - name: Upload Installer to Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: SimpleAppInstaller
         path: SimpleApp\Output\*
+
 
